@@ -29,4 +29,19 @@ export class CountryService {
     );
   }
 
+  searchByCountry(query: string): Observable<Country[]> {
+    query = query.trim().toLowerCase();
+
+    return this.http
+    .get<RESTCountry[]>(`${BASE_URL}/name/${query}`)
+    .pipe(
+      map(restCountries => restCountries.map(CountryMapper.mapRestCountryToCountry)),
+      catchError(error => {
+        console.log('Error fetching countries by capital',error);
+
+        return throwError(() => new Error(`No se encontraron países con ese query #${query}`));
+      })
+    );
+  }
+
 }

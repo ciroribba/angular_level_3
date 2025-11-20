@@ -25,7 +25,11 @@
           </span>
         </td>
         <td>
-          <a class="link-success cursor-pointer">Más Info</a>
+          <a 
+             [routerLink]="['/country/by', country.cca2]"
+             class="link-success cursor-pointer">
+                Más Info
+            </a>
         </td>
       </tr>
       }
