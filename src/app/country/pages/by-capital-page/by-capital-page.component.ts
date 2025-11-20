@@ -1,9 +1,11 @@
-import { Component, inject, signal, resource } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { SearchInput } from "../../components/search-input/search-input";
 import { CountryList } from "../../components/country-list/country-list";
 import { CountryService } from '../../services/country';
 //import { Country } from '../../interfaces/country.interface';
-import { firstValueFrom } from 'rxjs';
+import { of } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { Country } from '../../interfaces/country.interface';
 @Component({
   selector: 'by-capital-page',
   imports: [SearchInput, CountryList ],
@@ -13,18 +15,44 @@ export class ByCapitalPageComponent {
   countryService = inject(CountryService);
   query = signal('');
 
-  countryResource = resource({
-    params: () => ({query: this.query()}),
-    loader: async({ params }) => {
-      console.log({params});
-      if(!params.query) return [];
+  countryResource = rxResource<Country[], { query: string }>({
+    // de dónde salen los params
+    params: () => ({ query: this.query() }),
 
-      return await firstValueFrom(
-        this.countryService.searchByCapital(params.query)
-      );
-    }
+    // el stream devuelve directamente el Observable
+    stream: ({ params }) => {
+      console.log({ params });
+
+      if (!params.query) {
+        // sin búsqueda → lista vacía
+        return of<Country[]>([]);
+      }
+
+      // con búsqueda → llamamos al servicio que ya devuelve Observable<Country[]>
+      return this.countryService.searchByCapital(params.query);
+    },
+
+    // opcional, pero muy cómodo para evitar undefined en templates
+    defaultValue: [],
   });
 
+  countries = computed(() => this.countryResource.value() ?? []);
+
+
+  //usando resource
+  // countryResource = resource({
+  //   params: () => ({query: this.query()}),
+  //   loader: async({ params }) => {
+  //     console.log({params});
+  //     if(!params.query) return [];
+
+  //     return await firstValueFrom(
+  //       this.countryService.searchByCapital(params.query)
+  //     );
+  //   }
+  // });
+
+  //usando forma tradicional
   // isLoading = signal(false);
   // isError = signal<string|null>(null)
   // countries = signal<Country[]>([])
