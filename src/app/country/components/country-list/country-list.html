@@ -33,6 +33,31 @@
         </td>
       </tr>
       }
+
+      @if(errorMessage()) {
+        <!-- ERROR -->
+        <tr>
+          <td colspan="8" class="text-center">
+               {{ errorMessage() }}
+            </td>
+          </tr>
+        }
+        <!-- CARGANDO -->
+        @if(isLoading()) {
+          <tr>
+            <td colspan="8" class="text-center">
+              <span class="loading loading-spinner loading-lg"></span>
+            </td>
+          </tr>
+        }
+        <!-- VACÍO -->
+        @if(isEmpty() && !isLoading()) {
+          <tr>
+            <td colspan="8" class="text-center">
+              No se encontraron resultados
+            </td>
+          </tr>
+        }
     </tbody>
   </table>
 </section>
