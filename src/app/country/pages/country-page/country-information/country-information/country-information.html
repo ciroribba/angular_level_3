@@ -1,0 +1,7 @@
+<section class="mx-10">
+    <h1 class="text-2xl font-bold">{{ country().name }}</h1>
+    <div class="flex flex-col gap-2">
+        <p class="text-sm">Capital: {{ country().capital }}</p>
+        <p class="text-sm">Población: {{ country().population | number:'1.0-0':'en-US'}}</p>
+    </div>
+</section>
