@@ -8,8 +8,15 @@ export class CountryMapper {
             flag: restCountry.flag,
             flagSvg: restCountry.flags.svg,
             name: restCountry.translations['spa']?.common ?? restCountry.name.common,
-            capital: restCountry.capital.join(', '),
+            capital: restCountry.capital?.join(', ') ?? '',
             population: restCountry.population,
+            region: restCountry.region ?? '',
+            subregion: restCountry.subregion ?? '',
+            languages: Object.values(restCountry.languages ?? {}),
+            currencies: Object.values(restCountry.currencies ?? {}),
+            borders: restCountry.borders ?? [],
+            flags: restCountry.flags,
+            coatOfArms: restCountry.coatOfArms,
         };
     }
 

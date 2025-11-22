@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Country } from '../../../../interfaces/country.interface';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'country-information',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, TitleCasePipe, UpperCasePipe],
   templateUrl: './country-information.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CountryInformation {
   country = input.required<Country>();
+  currentYear = computed(() => new Date().getFullYear());
  }
